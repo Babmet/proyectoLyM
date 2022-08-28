@@ -21,6 +21,18 @@ def inicioEsVar(f):
                 VAR = True
     return VAR
 
+def llavesAperturaPresentes(lineNumber, f):
+    presente=True
+    if f[lineNumber][-1] != '{' and f[lineNumber+1][0]!='{':
+        presente = False
+    return presente
+
+def llavesCerrarPresentes(lineNumber, f):
+    presente=True
+    if f[lineNumber][0] != '}' and f[lineNumber-1][-1]!='}':
+        presente = False
+    return presente
+
 #definiciones
 def isName(s, i,j):
     res = False
