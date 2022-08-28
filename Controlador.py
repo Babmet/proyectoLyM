@@ -40,3 +40,32 @@ def initVar(f):
             return True                   #Se declararon correctamente
     return False
 
+def Procedures(f):
+    i=0
+    inicioRangoActual = 0
+    finRangoActual = 0
+    rangoActual = []
+    PROCs = []
+    lineNumber= 0
+
+    if len(f)<=2:
+        return False
+
+    for line in f:
+        if "PROC" in line:
+            if (i!=0) or (m.llavesAperturaPresentes(lineNumber, f)==False):
+                return False
+            i+=1
+            inicioRangoActual = lineNumber
+
+        if "CORP" in line:
+            if (i!=1) or (m.llavesCerrarPresentes(lineNumber, f)==False):
+                return False
+            i-=1
+            finRangoActual = lineNumber+1
+            rangoActual = f[inicioRangoActual:finRangoActual]
+            PROCs.append(rangoActual)
+
+        lineNumber +=1
+    return PROCs
+
