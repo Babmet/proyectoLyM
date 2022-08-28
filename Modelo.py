@@ -22,24 +22,21 @@ def inicioEsVar(f):
     return VAR
 
 #definiciones
-def isName(s, i):
+def isName(s, i,j):
     res = False
     d= 0
-    if i == 0:
-        if len(s)>=1:
-            if s[0].isalpha():
-                for c in s:
-                    if c.isalpha() or c.isnumeric():
-                        d+=1
-                
-    if i==1:
-        s = s[:-1]
-        if len(s)>=1:
-            if s[0].isalpha():
-                for c in s:
-                    if c.isalpha()or c.isnumeric():
-                        d+=1
+    if i ==j:
+        if ';' in s:
+            s = s[:-1]
+        else:
+            return False
+        
+    if len(s)>=1:
+        if s[0].isalpha():
+            for c in s:
+                if c.isalpha() or c.isnumeric():
+                    d+=1              
+
     if d== len(s):
         res = True         
     return res
-#print(isName("loquesea ", 0))
