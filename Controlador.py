@@ -60,7 +60,9 @@ def initVar(f):
 
 def Procedures(f):
     listaPrevia = m.PROCs(f)
-    if (listaPrevia == False) or (m.revisarEstructura(listaPrevia) != True):
-        return False
-    return listaPrevia
+    if (listaPrevia == False) or (m.revisarEstructura(listaPrevia)[0] != True):
+        return (False, False)
+    return (listaPrevia,m.revisarEstructura(listaPrevia)[1])
+
+           
 
