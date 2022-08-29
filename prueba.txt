@@ -1,9 +1,22 @@
+
 PROG
-VAR loquesea , dos;
 
-doc de prueba
-kk
+VAR variable1, variable2;
 
+PROC putCB (c, b) {   
+
+drop (c);
+free (b);
+walk (n)
+
+}CORP
+
+
+PROC nimbre(c)
+{ 
+
+} 
+CORP
 
 
 GORP
