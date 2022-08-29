@@ -12,7 +12,7 @@ walk (n)
 }CORP
 
 
-PROC nimbre(c)
+PROC nimbre (e,d, f)
 { 
 
 } 
