@@ -1,3 +1,6 @@
+from re import A
+
+
 def arreglarFormato(f):
     i = 0                           # "PROG GORP"
     while i< len(f):
@@ -77,6 +80,8 @@ def PROCs(f):    #Retorna lista de listas. No revisa ni nombre ni parametros en 
     return PROCs #PROCs es tambien llamado listaPrevia 
 
 def revisarEstructura(listaPrevia): 
+    funciones = {}
+    z=0
     
     for PROC in listaPrevia:
         if len(PROC[0])>=8:
@@ -84,6 +89,7 @@ def revisarEstructura(listaPrevia):
             if ' ' in signatura:
                 lista=signatura.split(" ",1)
                 if isName(lista[0],0,5) and lista[1][0]=="(":
+                    functName = lista[0]
                     if lista[1].count('(')==1:
                         lista[1]=lista[1].strip('(')
                         listaparametros= lista[1].split(",")
@@ -92,15 +98,25 @@ def revisarEstructura(listaPrevia):
                         if lista[1].count(')')==1:
                             if listaparametros[-1][-1]=='{':
                                 listaparametros[-1]=listaparametros[-1].rstrip('{')
+                            parameterlist = []
                             while p < len(listaparametros):
                                 listaparametros[p]= listaparametros[p].strip()
                                 if isName(listaparametros[p],len(listaparametros), p+1):                                    
-                                    c+=1 
+                                    c+=1
+                                    if len(listaparametros)== p+1:
+                                        listaparametros[p]=listaparametros[p].strip(')')
+                                    parameterlist.append(listaparametros[p]) 
                                 p+=1
+                            dicTemp = {functName:parameterlist}
+                            funciones.update(dicTemp)
                             if c==p:
-                                return True
+                                z+=1
+        
                            
-        return False
+    if z== len(listaPrevia):
+        return (True, funciones)
+                           
+    return (False, False)
 
 #definiciones
 def isParameter(listaParametros):
