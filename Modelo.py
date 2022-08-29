@@ -25,20 +25,95 @@ def llavesAperturaPresentes(lineNumber, f):
     presente=True
     if f[lineNumber][-1] != '{' and f[lineNumber+1][0]!='{':
         presente = False
+    if f[lineNumber][-1] == '{' and f[lineNumber+1][0]=='{':
+        presente = False
     return presente
 
 def llavesCerrarPresentes(lineNumber, f):
     presente=True
     if f[lineNumber][0] != '}' and f[lineNumber-1][-1]!='}':
         presente = False
+    if f[lineNumber][0] == '}' and f[lineNumber-1][-1]=='}':
+        presente= False
     return presente
 
+def PROCs(f):    #Retorna lista de listas. No revisa ni nombre ni parametros en la signatura.
+                #Revisa que existan las respectivas parejas de PROC-CORP y llaves de abrir y cerrar
+                #Si no se cumple retorna False
+
+    i=0
+    inicioRangoActual = 0
+    finRangoActual = 0
+    rangoActual = []
+    PROCs = []
+    lineNumber= 0
+
+    if len(f)<=2:
+        return False
+
+    for line in f:
+        if "PROC " in line:
+            if (i!=0) or (llavesAperturaPresentes(lineNumber, f)==False):
+                return False
+            i+=1
+            inicioRangoActual = lineNumber
+
+        if "CORP" in line:
+            if (i!=1) or (llavesCerrarPresentes(lineNumber, f)==False):
+                return False
+            if '}' in line:
+                lList= line.split('}')
+                if ((lList[1].strip()) != "CORP"):
+                    return False
+                
+            i-=1
+            finRangoActual = lineNumber+1
+            rangoActual = f[inicioRangoActual:finRangoActual]
+            PROCs.append(rangoActual)
+
+        lineNumber +=1
+    if i!=0:
+        PROCs= False
+    return PROCs #PROCs es tambien llamado listaPrevia 
+
+def revisarEstructura(listaPrevia): 
+    
+    for PROC in listaPrevia:
+        if len(PROC[0])>=8:
+            signatura = PROC[0][5:]
+            if ' ' in signatura:
+                lista=signatura.split(" ",1)
+                if isName(lista[0],0,5) and lista[1][0]=="(":
+                    if lista[1].count('(')==1:
+                        lista[1]=lista[1].strip('(')
+                        listaparametros= lista[1].split(",")
+                        p=0
+                        c=0
+                        if lista[1].count(')')==1:
+                            if listaparametros[-1][-1]=='{':
+                                listaparametros[-1]=listaparametros[-1].rstrip('{')
+                            while p < len(listaparametros):
+                                listaparametros[p]= listaparametros[p].strip()
+                                if isName(listaparametros[p],len(listaparametros), p+1):                                    
+                                    c+=1 
+                                p+=1
+                            if c==p:
+                                return True
+                           
+        return False
+
 #definiciones
+def isParameter(listaParametros):
+    i=0
+    for parametro in listaParametros:
+        if type(parametro)==int:
+            i+=1
+
 def isName(s, i,j):
     res = False
     d= 0
     if i ==j:
-        if ';' in s:
+        if ';' in s or (')' in s):
             s = s[:-1]
         else:
             return False
